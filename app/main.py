@@ -1,4 +1,6 @@
+import uvicorn
 from fastapi import FastAPI
+from starlette.requests import Request
 
 app = FastAPI()
 
@@ -23,3 +25,7 @@ easter_egg = ("The life of coder is like a dance,\n"
 @app.get("/")
 async def root():
     return {"message": easter_egg}
+
+
+if __name__ == "__main__":
+    uvicorn.run('main:app', host="0.0.0.0", port=8000, reload=True)

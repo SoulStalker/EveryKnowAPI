@@ -1,0 +1,12 @@
+
+.env
+
+.mypy_cache/
+.vscode/
+venv/
+__pycache__/
+
+idea/.
+.idea
+*.json
+docker-compose.yml
