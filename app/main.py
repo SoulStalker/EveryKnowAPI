@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-from starlette.requests import Request
+from database.database import fake_db
 
 app = FastAPI()
 
@@ -25,6 +25,22 @@ easter_egg = ("The life of coder is like a dance,\n"
 @app.get("/")
 async def root():
     return {"message": easter_egg}
+
+
+@app.get("/categories")
+async def categories():
+    return fake_db["categories"]
+
+
+@app.get("/categories/{id}")
+async def in_categories(category_id: int):
+    return fake_db["categories"][category_id]
+
+
+@app.post("/add_category")
+async def add_category(name: str):
+    fake_db["categories"].append(name)
+    return fake_db["categories"]
 
 
 if __name__ == "__main__":
