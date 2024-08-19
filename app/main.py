@@ -1,6 +1,6 @@
 import uvicorn
-from fastapi import FastAPI
-from database.database import fake_db
+from fastapi import FastAPI, HTTPException
+from database.database import fake_db, database
 
 app = FastAPI()
 
@@ -22,6 +22,16 @@ easter_egg = ("The life of coder is like a dance,\n"
               "And through their work, the world's reborn.")
 
 
+@app.on_event('startup')
+async def startup():
+    await database.connect()
+
+
+@app.on_event('shutdown')
+async def shutdown():
+    await database.disconnect()
+
+
 @app.get("/")
 async def root():
     return {"message": easter_egg}
@@ -39,8 +49,13 @@ async def in_categories(category_id: int):
 
 @app.post("/add_category")
 async def add_category(name: str):
-    fake_db["categories"].append(name)
-    return fake_db["categories"]
+    query = "INSERT INTO categories (name) VALUES (:name) RETURNING id"
+    values = {"name": name}
+    try:
+        category_id = await database.execute(query, values)
+        return category_id
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":
