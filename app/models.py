@@ -10,30 +10,42 @@ class Category(Base):
     __tablename__ = 'categories'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String, unique=True)
+    parent_id = Column(Integer, ForeignKey('categories.id'))
 
 
 class Article(Base):
     __tablename__ = 'articles'
 
     id = Column(Integer, primary_key=True)
-    title = Column(String)
+    title = Column(String, unique=True)
     content = Column(String)
     create_at = Column(DateTime, auto_now_add=True)
     update_at = Column(DateTime, auto_now=True)
+    author_id = Column(Integer, ForeignKey('users.id'))
     category_id = Column(Integer, ForeignKey('categories.id'))
 
 
-class Author(Base):
-    __tablename__ = 'authors'
+class User(Base):
+    __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    email = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
+    email = Column(String, unique=True)
+    tg_id = Column(String, unique=True)
+    department_id = Column(ForeignKey('departments.id'))
+
+
+class Department(Base):
+    __tablename__ = 'departments'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True)
 
 
 class Tag(Base):
     __tablename__ = 'tags'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+    tag_id = Column(Integer, primary_key=True)
+    tag_name = Column(String, unique=True)
