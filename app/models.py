@@ -3,16 +3,17 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, MetaData, 
 metadata = MetaData()
 
 categories = Table(
-    'categories',
+    'category',
     metadata,
     Column('id', Integer, primary_key=True),
     Column('name', String(30), nullable=False, unique=True),
     Column('parent_id', Integer, ForeignKey('categories.id')),
+    Column('department_id', Integer, ForeignKey('departments.id')),
 )
 
 
 articles = Table(
-    'articles',
+    'article',
     metadata,
     Column('id', Integer, primary_key=True),
     Column('title', String(30), nullable=False, unique=True),
@@ -25,7 +26,7 @@ articles = Table(
 
 
 roles = Table(
-    'roles',
+    'role',
     metadata,
     Column('id', Integer, primary_key=True),
     Column('name', String(30), nullable=False, unique=True),
@@ -33,7 +34,7 @@ roles = Table(
 )
 
 users = Table(
-    'users',
+    'user',
     metadata,
     Column('id', Integer, primary_key=True),
     Column('first_name', String(30), nullable=False),
@@ -47,7 +48,7 @@ users = Table(
 )
 
 departments = Table(
-    'departments',
+    'department',
     metadata,
     Column('id', Integer, primary_key=True),
     Column('name', String(30), nullable=False, unique=True),
@@ -55,7 +56,7 @@ departments = Table(
 
 
 tags = Table(
-    'tags',
+    'tag',
     metadata,
     Column('tag_id', Integer, primary_key=True),
     Column('tag_name', String(30), nullable=False, unique=True),

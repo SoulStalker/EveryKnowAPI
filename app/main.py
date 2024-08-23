@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
-from database.database import fake_db, database
+from database.database import database
 
 app = FastAPI()
 
@@ -39,12 +39,12 @@ async def root():
 
 @app.get("/categories")
 async def categories():
-    return fake_db["categories"]
+    return "categories"
 
 
 @app.get("/categories/{id}")
 async def in_categories(category_id: int):
-    return fake_db["categories"][category_id]
+    return 0
 
 
 @app.post("/add_category")
