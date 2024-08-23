@@ -1,51 +1,62 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, MetaData, Table, Text, func, JSON
+
+metadata = MetaData()
+
+categories = Table(
+    'categories',
+    metadata,
+    Column('id', Integer, primary_key=True),
+    Column('name', String(30), nullable=False, unique=True),
+    Column('parent_id', Integer, ForeignKey('categories.id')),
+)
 
 
-class Base(DeclarativeBase):
-    pass
+articles = Table(
+    'articles',
+    metadata,
+    Column('id', Integer, primary_key=True),
+    Column('title', String(30), nullable=False, unique=True),
+    Column('content', Text, nullable=False),
+    Column('created_at', DateTime, nullable=False, server_default=func.now()),
+    Column('updated_at', DateTime, nullable=False, server_default=func.now(), onupdate=func.now()),
+    Column('author_id', Integer, ForeignKey('users.id')),
+    Column('category_id', Integer, ForeignKey('categories.id')),
+)
 
 
-class Category(Base):
-    __tablename__ = 'categories'
+roles = Table(
+    'roles',
+    metadata,
+    Column('id', Integer, primary_key=True),
+    Column('name', String(30), nullable=False, unique=True),
+    Column('permission', JSON, nullable=False),
+)
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String, unique=True)
-    parent_id = Column(Integer, ForeignKey('categories.id'))
+users = Table(
+    'users',
+    metadata,
+    Column('id', Integer, primary_key=True),
+    Column('first_name', String(30), nullable=False),
+    Column('last_name', String(30), nullable=False),
+    Column('email', String(50), nullable=False, unique=True),
+    Column('password', String(50), nullable=False),
+    Column('tg_id', String(50), nullable=False, unique=True),
+    Column('register_date', DateTime, nullable=False, server_default=func.now()),
+    Column('department_id', Integer, ForeignKey('departments.id')),
+    Column('role_id', Integer, ForeignKey('roles.id')),
+)
 
-
-class Article(Base):
-    __tablename__ = 'articles'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(String, unique=True)
-    content = Column(String)
-    create_at = Column(DateTime, auto_now_add=True)
-    update_at = Column(DateTime, auto_now=True)
-    author_id = Column(Integer, ForeignKey('users.id'))
-    category_id = Column(Integer, ForeignKey('categories.id'))
-
-
-class User(Base):
-    __tablename__ = 'user'
-
-    id = Column(Integer, primary_key=True)
-    first_name = Column(String)
-    last_name = Column(String)
-    email = Column(String, unique=True)
-    tg_id = Column(String, unique=True)
-    department_id = Column(ForeignKey('departments.id'))
-
-
-class Department(Base):
-    __tablename__ = 'departments'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String, unique=True)
+departments = Table(
+    'departments',
+    metadata,
+    Column('id', Integer, primary_key=True),
+    Column('name', String(30), nullable=False, unique=True),
+)
 
 
-class Tag(Base):
-    __tablename__ = 'tags'
-
-    tag_id = Column(Integer, primary_key=True)
-    tag_name = Column(String, unique=True)
+tags = Table(
+    'tags',
+    metadata,
+    Column('tag_id', Integer, primary_key=True),
+    Column('tag_name', String(30), nullable=False, unique=True),
+)

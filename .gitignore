@@ -1,4 +1,3 @@
-
 .env
 
 .mypy_cache/
@@ -10,3 +9,5 @@ idea/.
 .idea
 *.json
 docker-compose.yml
+Dockerfile
+
