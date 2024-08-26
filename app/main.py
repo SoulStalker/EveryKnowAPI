@@ -1,8 +1,17 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
+
+
+from authorization.auth import auth_backend
 from database.database import database
 
 app = FastAPI()
+
+app.include_router(
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="/auth/jwt",
+    tags=["auth"],
+)
 
 easter_egg = ("The life of coder is like a dance,\n"
               "With keys that tap in rhythmic trance.\n"
