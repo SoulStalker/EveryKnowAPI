@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, MetaData, Table, Text, func, JSON, Boolean
 
 metadata = MetaData()
@@ -18,7 +20,7 @@ article = Table(
     Column('id', Integer, primary_key=True),
     Column('title', String(30), nullable=False, unique=True),
     Column('content', Text, nullable=False),
-    Column('created_at', DateTime, nullable=False, server_default=func.now()),
+    Column('created_at', DateTime, nullable=False, default=datetime.now()),
     Column('updated_at', DateTime, nullable=False, server_default=func.now(), onupdate=func.now()),
     Column('author_id', Integer, ForeignKey('user.id')),
     Column('category_id', Integer, ForeignKey('category.id')),
@@ -30,7 +32,7 @@ role = Table(
     metadata,
     Column('id', Integer, primary_key=True),
     Column('name', String(30), nullable=False, unique=True),
-    Column('permission', JSON, nullable=False),
+    Column('permission', JSON, nullable=True), # todo изменить на False
 )
 
 user = Table(
@@ -40,14 +42,14 @@ user = Table(
     Column('first_name', String(30), nullable=False),
     Column('last_name', String(30), nullable=False),
     Column('email', String(50), nullable=False, unique=True),
-    Column('hashed_password', String(50), nullable=False),
+    Column('hashed_password', String(1024), nullable=False),
     Column('tg_id', String(50), nullable=False, unique=True),
-    Column('register_date', DateTime, nullable=False, server_default=func.now()),
+    Column('registered_at', DateTime, nullable=False, server_default=func.now()),
     Column('department_id', Integer, ForeignKey('department.id')),
     Column('role_id', Integer, ForeignKey('role.id')),
     Column('is_active', Boolean, nullable=False, default=True),
     Column('is_superuser', Boolean, nullable=False, default=False),
-    Column('verified', Boolean, nullable=False, default=False),
+    Column('is_verified', Boolean, nullable=False, default=False),
 )
 
 

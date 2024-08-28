@@ -1,9 +1,10 @@
+import datetime
 from typing import AsyncGenerator
 
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
-from sqlalchemy import Integer, String, Boolean, ForeignKey
+from sqlalchemy import Integer, String, Boolean, ForeignKey, DateTime
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -25,7 +26,7 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     first_name: Mapped[str] = mapped_column(String(length=30), index=True, nullable=False)
     last_name: Mapped[str] = mapped_column(String(length=30), index=True, nullable=False)
     tg_id: Mapped[str] = mapped_column(String(length=50), index=True, nullable=False)
-    registered_at: Mapped[str] = mapped_column(String(length=50), index=True, nullable=False)
+    # registered_at: Mapped[datetime] = mapped_column(DateTime, index=True, nullable=False)
     department_id: Mapped[int] = mapped_column(Integer, ForeignKey(department.c.id), nullable=False)
     role_id: Mapped[int] = mapped_column(Integer, ForeignKey(role.c.id), nullable=False)
 

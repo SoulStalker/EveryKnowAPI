@@ -18,19 +18,19 @@ fastapi_users = FastAPIUsers[User, int](
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
-    prefix="/auth/jwt",
+    prefix="/auth",
     tags=["auth"],
 )
 
 app.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
-    prefix="/auth/jwt",
+    prefix="/auth",
     tags=["auth"],
 )
 
 app.include_router(
     fastapi_users.get_verify_router(UserRead),
-    prefix="/auth/jwt",
+    prefix="/auth",
     tags=["auth"],
 )
 
@@ -90,7 +90,18 @@ async def add_category(name: str):
 
 @app.post("/add_role")
 async def add_role(name: str):
-    query = "INSERT INTO roles (name) VALUES (:name) RETURNING id"
+    query = "INSERT INTO role (name) VALUES (:name) RETURNING id"
+    values = {"name": name}
+    try:
+        role_id = await database.execute(query, values)
+        return role_id
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/add_department")
+async def add_department(name: str):
+    query = "INSERT INTO department (name) VALUES (:name) RETURNING id"
     values = {"name": name}
     try:
         role_id = await database.execute(query, values)

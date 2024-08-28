@@ -10,6 +10,26 @@ uvicorn main:app --reload
 
 http://127.0.0.1:8000/docs
 
+## Команды для **Alembic**
+
+
+### Инициализация каталога миграций
+```
+alembic init migrations
+```
+### Создание новой миграции
+```
+alembic revision --autogenerate --message "Обновление таблицы пользователей"
+```
+### Применение миграции
+```
+alembic upgrade head
+```
+### Отмена последней миграции
+```
+alembic downgrade -1 
+```
+
 Структура базы данных на данный момент вижу таким:
 
 ```SQL
